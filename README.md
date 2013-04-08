@@ -4,8 +4,8 @@
 
 ```ruby
 # Initialize
-$switches = Switches do
-  backend "redis://localhost:6379/0"
+$switches = Switches do |config|
+  config.backend = "redis://localhost:6379/0"
 end
 
 # Turn a feature on globally
