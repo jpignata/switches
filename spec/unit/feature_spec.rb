@@ -1,7 +1,9 @@
 require "spec_helper"
 
 describe Feature do
-  let(:feature) { Feature.new(:redesign) }
+  let(:instance) { stub(set: true, notify: true) }
+
+  let(:feature) { Feature.new(:redesign, instance) }
 
   describe "#on" do
     it "turns the feature on" do

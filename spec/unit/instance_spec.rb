@@ -1,7 +1,13 @@
 require "spec_helper"
 
 describe Instance do
-  let(:instance) { Instance.new(stub) }
+  let(:configuration) do
+    Configuration.new do |config|
+      config.backend = "memory:///"
+    end
+  end
+
+  let(:instance) { Instance.new(configuration) }
 
   describe "#feature" do
     it "returns a new feature" do
