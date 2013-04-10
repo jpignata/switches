@@ -1,77 +1,83 @@
 class Feature
-  attr_reader :name
+  attr_reader :name, :percentage
 
   def initialize(name, instance)
     @name = name
     @instance = instance
-    @percentage = 0.0
-    @on = false
+    @percentage = Percentage(0)
+    @cohorts = Set.new
   end
 
   def reload
     if data = @instance.get(self)
-      @percentage = data["percentage"].to_f
-
-      if @percentage > 0.0
-        @on = true
-      end
+      @percentage = Percentage(data["percentage"])
+      @cohorts = data["cohorts"].to_set
     end
 
     self
   end
 
-  def on(percentage = nil)
-    @on = true
-    @percentage = percentage || 100.0
+  def on(numeric = 100)
+    @percentage = Percentage(numeric)
     updated
-    self
   end
 
   def off
-    @on = false
-    @percentage = 0.0
+    @percentage = Percentage(0)
     updated
-    self
   end
 
-  def on?
-    @on == true
+  def add(cohort_name)
+    @cohorts.add(cohort_name.to_s)
+    updated
   end
 
-  def off?
-    !on?
-  end
-
-  def percentage
-    @percentage || 0.0
+  def remove(cohort_name)
+    @cohorts.delete(cohort_name.to_s)
+    updated
   end
 
   def inspect
-    output = "#<Feature"
-    output += " name:#{@name}"
-
-    if on?
-      if @percentage == 100.0
-        output += " on"
-      else
-        output += " on:#{@percentage}"
-      end
-    else
-      output += " off"
-    end
-
+    output = "#<Feature #{@name}; #{@percentage}"
+    output += "; #{@cohorts.to_a.join(", ")}" if @cohorts.any?
     output += ">"
+  end
+
+  def to_json
+    {
+      name: name,
+      percentage: percentage,
+      cohorts: @cohorts.to_a
+    }.to_json
+  end
+
+  def cohorts
+    @cohorts.to_a
+  end
+
+  def on?(identifier)
+    return true if @percentage.max?
+
+    in_cohort?(identifier) || in_percentage?(identifier)
+  end
+
+  private
+
+  def in_cohort?(identifier)
+    @cohorts.any? do |cohort|
+      @instance.cohort(cohort).include?(identifier)
+    end
+  end
+
+  def in_percentage?(identifier)
+    return false if @percentage.min?
+
+    @percentage.include?(identifier)
   end
 
   def updated
     @instance.set(self)
     @instance.notify(self)
-  end
-
-  def to_json
-    JSON.generate(
-      name: name,
-      percentage: percentage
-    )
+    self
   end
 end

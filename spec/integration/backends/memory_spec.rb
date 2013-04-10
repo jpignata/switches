@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe Backends::Redis do
-  let(:backend_url) { "redis://localhost:6379/15" }
+  let(:backend_url) { "memory:///" }
 
   before do
     switches = Switches do |config|

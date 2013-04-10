@@ -1,12 +1,12 @@
 require "uri"
+
 class Backend
   def self.factory(url, instance)
     uri = URI(url)
 
-    case uri.scheme
-    when "redis"
+    if uri.scheme == "redis"
       Backends::Redis.new(uri, instance)
-    when "memory"
+    else
       Backends::Memory.new(uri, instance)
     end
   end

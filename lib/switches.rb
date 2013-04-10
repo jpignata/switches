@@ -1,18 +1,28 @@
 require "securerandom"
 require "thread"
+require "monitor"
 require "json"
-require "redis"
+require "set"
+require "zlib"
 
 require "switches/configuration"
 require "switches/instance"
+require "switches/cohorts"
+require "switches/cohort"
+require "switches/features"
 require "switches/feature"
-require "switches/backend"
+require "switches/percentage"
+require "switches/update"
 require "switches/backends/redis"
 require "switches/backends/memory"
-require "switches/update"
+require "switches/backend"
+
+Thread.abort_on_exception = true
 
 def Switches
   configuration = Configuration.new
   yield configuration
-  Instance.new(configuration)
+
+  instance = Instance.new(configuration)
+  instance.start
 end

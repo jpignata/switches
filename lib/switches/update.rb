@@ -1,21 +1,21 @@
 class Update
   attr_accessor :type, :name, :node_id
 
-  def self.parse(update)
-    attributes = JSON.parse(update)
+  def initialize(attributes = {})
+    @type = attributes["type"]
+    @name = attributes["name"]
+    @node_id = attributes["node_id"]
+  end
 
-    update = new
-    update.type = attributes["type"].to_sym
-    update.name = attributes["name"].to_sym
-    update.node_id = attributes["node_id"]
-    update
+  def from?(node_id)
+    @node_id == node_id
   end
 
   def to_json
-    JSON.generate(
-      type: type,
-      name: name,
-      node_id: node_id
-    )
+    {
+      "type" => type,
+      "name" => name,
+      "node_id" => node_id
+    }.to_json
   end
 end

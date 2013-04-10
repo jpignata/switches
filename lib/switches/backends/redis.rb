@@ -1,3 +1,5 @@
+require "redis"
+
 module Backends
   class Redis
     PREFIX = "switches"
@@ -13,12 +15,8 @@ module Backends
     end
 
     def get(item)
-      data = connection.get(key_for(item))
-
-      if data
-        JSON.parse(data)
-      else
-        {}
+      if data = connection.get(key_for(item))
+        parse(data)
       end
     end
 
@@ -28,6 +26,10 @@ module Backends
 
     def notify(update)
       connection.publish(CHANNEL, update.to_json)
+    end
+
+    def clear
+      connection.flushdb
     end
 
     private
@@ -45,16 +47,26 @@ module Backends
     end
 
     def subscribe
-      listener.subscribe(NOTIFICATION_CHANNEL) do |on|
-        on.message do |_, message|
-          update = Update.parse(message)
-          @instance.update_received(update) if update
-        end
+      listener.subscribe(CHANNEL) do |on|
+        on.message { |_, message| process(message) }
       end
     end
 
     def key_for(item)
-      "#{item.class.to_s.downcase}:#{item.name}"
+      [item.class.to_s.downcase, item.name].join(":")
+    end
+
+    def parse(json)
+      JSON.parse(json.to_s)
+    rescue JSON::ParserError
+      {}
+    end
+
+    def process(message)
+      attributes = parse(message)
+      update = Update.new(attributes)
+
+      @instance.notified(update)
     end
   end
 end

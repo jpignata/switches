@@ -1,25 +1,29 @@
 class Instance
+  include MonitorMixin
+
   attr_reader :node_id
 
   def initialize(configuration)
-    @configuration = configuration
-    @features = {}
-    @cohorts = {}
-    @mutex = Mutex.new
-    @node_id = SecureRandom.hex(5)
+    @url     = configuration.backend
+    @node_id = SecureRandom.hex(3)
 
+    mon_initialize
+  end
+
+  def start
     backend.listen
+    self
   end
 
   def feature(name)
-    @mutex.synchronize do
-      @features[name] ||= Feature.new(name, self).reload
+    synchronize do
+      features[name]
     end
   end
 
   def cohort(name)
-    @mutex.synchronize do
-      @cohort[name] ||= Cohort.new(name, self).reload
+    synchronize do
+      cohorts[name]
     end
   end
 
@@ -32,25 +36,49 @@ class Instance
   end
 
   def notify(item)
-    update = Update.new
-    update.type = item.class.to_s
-    update.name = item.name
-    update.node_id = node_id
+    Update.new.tap do |update|
+      update.type = item.class.to_s
+      update.name = item.name
+      update.node_id = node_id
 
-    @backend.notify(update)
+      backend.notify(update)
+    end
   end
 
-  def update_received(update)
-    return if update.node_id == node_id
+  def notified(update)
+    return if update.from?(node_id)
 
-    @mutex.synchronize do
-      @features[update.name] = feature(update.name).reload
+    case update.type
+    when "Feature"
+      synchronize do
+        features[update.name].reload
+      end
+    when "Cohort"
+      synchronize do
+        cohorts[update.name].reload
+      end
     end
+  end
+
+  def clear
+    backend.clear
+  end
+
+  def inspect
+    "#<Switches #{@url}>"
   end
 
   private
 
   def backend
-    @backend ||= Backend.factory(@configuration.backend, self)
+    @backend ||= Backend.factory(@url, self)
+  end
+
+  def features
+    @features ||= Features.new(self)
+  end
+
+  def cohorts
+    @cohorts ||= Cohorts.new(self)
   end
 end

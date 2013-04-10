@@ -6,55 +6,39 @@ describe Feature do
   let(:feature) { Feature.new(:redesign, instance) }
 
   describe "#on" do
-    it "turns the feature on" do
-      feature.should_not be_on
+    it "turns the feature on to 100 percent" do
+      feature.percentage.should eq(Percentage(0))
       feature.on
-      feature.should be_on
+      feature.percentage.should eq(Percentage(100))
     end
 
     context "with a percentage" do
       it "turns the feature on to that percentage" do
-        feature.should_not be_on
+        feature.percentage.should eq(Percentage(0))
         feature.on(25)
-        feature.should be_on
-        feature.percentage.should eq(25)
-      end
-    end
-  end
-
-  describe "#on?" do
-    context "the feature has been turned on" do
-      it "returns true" do
-        feature.on
-        feature.should be_on
-      end
-    end
-
-    context "the feature has not been turned on" do
-      it "returns false if the feature hasn't been turned on" do
-        feature.should_not be_on
+        feature.percentage.should eq(Percentage(25))
       end
     end
   end
 
   describe "#inspect" do
     context "the feature has not been turned on" do
-      it "indicates the feature is off" do
-        feature.inspect.should eq("#<Feature name:redesign off>")
+      it "indicates the feature is set to 0 percent" do
+        feature.inspect.should eq("#<Feature redesign; 0%>")
       end
     end
 
     context "the feature has been turned on" do
-      it "indicates the feature is on" do
+      it "indicates the feature is set to 100 percent" do
         feature.on
-        feature.inspect.should eq("#<Feature name:redesign on>")
+        feature.inspect.should eq("#<Feature redesign; 100%>")
       end
     end
 
     context "the feature has been turned on to a percentage" do
       it "includes the percentage" do
         feature.on(33)
-        feature.inspect.should eq("#<Feature name:redesign on:33>")
+        feature.inspect.should eq("#<Feature redesign; 33%>")
       end
     end
   end
