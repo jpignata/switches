@@ -9,7 +9,7 @@ to dynamically enable features to a percentage of users or specific cohort
 groups without a code deploy.
 
 There are some excellent gems that provide this functionality already --
-[rollout](https://github.com/jamesgollick/rollout) and [flipper](https://github.com/jnunemaker/flipper).
+[rollout](https://github.com/jamesgolick/rollout) and [flipper](https://github.com/jnunemaker/flipper).
 This project is an experiment aiming for a specific set of design goals:
 
 1) Reduce the chatter in the protocol between a node checking to see if a
