@@ -54,7 +54,7 @@ module Switches
       end
 
       def key_for(item)
-        [item.class.to_s.downcase, item.name].join(":")
+        [item.type, item.name].join(":")
       end
 
       def parse(json)

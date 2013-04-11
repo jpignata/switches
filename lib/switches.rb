@@ -15,6 +15,7 @@ require "switches/percentage"
 require "switches/update"
 require "switches/backends/redis"
 require "switches/backends/memory"
+require "switches/backends/postgres"
 require "switches/backend"
 
 Thread.abort_on_exception = true

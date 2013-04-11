@@ -48,6 +48,10 @@ module Switches
       @members.to_a
     end
 
+    def type
+      "cohort"
+    end
+
     private
 
     def updated

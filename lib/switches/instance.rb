@@ -38,7 +38,7 @@ module Switches
 
     def notify(item)
       Switches::Update.new.tap do |update|
-        update.type = item.class.to_s
+        update.type = item.type
         update.name = item.name
         update.node_id = node_id
 
@@ -50,11 +50,11 @@ module Switches
       return if update.from?(node_id)
 
       case update.type
-      when "Switches::Feature"
+      when "feature"
         synchronize do
           features[update.name].reload
         end
-      when "Switches::Cohort"
+      when "cohort"
         synchronize do
           cohorts[update.name].reload
         end

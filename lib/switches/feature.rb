@@ -47,7 +47,7 @@ module Switches
     def to_json
       {
         name: name,
-        percentage: percentage,
+        percentage: percentage.to_i,
         cohorts: @cohorts.to_a
       }.to_json
     end
@@ -60,6 +60,10 @@ module Switches
       return true if @percentage.max?
 
       in_cohort?(identifier) || in_percentage?(identifier)
+    end
+
+    def type
+      "feature"
     end
 
     private
