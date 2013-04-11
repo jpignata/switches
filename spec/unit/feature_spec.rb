@@ -1,9 +1,9 @@
 require "spec_helper"
 
-describe Feature do
+describe Switches::Feature do
   let(:instance) { stub(set: true, notify: true) }
 
-  let(:feature) { Feature.new(:redesign, instance) }
+  let(:feature) { Switches::Feature.new(:redesign, instance) }
 
   describe "#on" do
     it "turns the feature on to 100 percent" do

@@ -1,7 +1,9 @@
-class Configuration
-  attr_accessor :backend
+module Switches
+  class Configuration
+    attr_accessor :backend
 
-  def initialize
-    yield self if block_given?
+    def initialize
+      yield self if block_given?
+    end
   end
 end

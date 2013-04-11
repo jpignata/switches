@@ -20,9 +20,9 @@ require "switches/backend"
 Thread.abort_on_exception = true
 
 def Switches
-  configuration = Configuration.new
+  configuration = Switches::Configuration.new
   yield configuration
 
-  instance = Instance.new(configuration)
+  instance = Switches::Instance.new(configuration)
   instance.start
 end
