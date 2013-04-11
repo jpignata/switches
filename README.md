@@ -45,7 +45,7 @@ This project is an experiment aiming for a specific set of design goals:
 ## Design
 
 Switches uses a backend for both storage of feature configuration data and for
-notifying sibling nodes that are change has occurred. We'll look at how this
+notifying sibling nodes that a change has been made. We'll look at how this
 works against the Redis backend.
 
 On startup, switches will connect to Redis twice: once for querying and setting
@@ -81,7 +81,7 @@ In your Gemfile:
 $switches = Switches do |config|
   config.backend = "redis://localhost:6379/0"
 end
-=> #<Switches redis://localhost:6379/12>
+# => #<Switches redis://localhost:6379/12>
 
 # Check to see if a feature is active for an identifier
 $switches.feature(:redesign).on?(current_user.id)
