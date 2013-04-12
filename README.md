@@ -112,7 +112,7 @@ Two rake tasks have been included to create and drop this table:
 $switches = Switches do |config|
   config.backend = "redis://localhost:6379/0"
 end
-# => #<Switches redis://localhost:6379/12>
+# => #<Switches redis://localhost:6379/0>
 
 # Check to see if a feature is active for an identifier
 $switches.feature(:redesign).on?(current_user.id)
