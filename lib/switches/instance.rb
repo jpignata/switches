@@ -37,13 +37,8 @@ module Switches
     end
 
     def notify(item)
-      Switches::Update.new.tap do |update|
-        update.type = item.type
-        update.name = item.name
-        update.node_id = node_id
-
-        backend.notify(update)
-      end
+      update = Update.build(item, node_id)
+      backend.notify(update)
     end
 
     def notified(update)
