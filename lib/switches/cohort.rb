@@ -58,6 +58,10 @@ module Switches
       "cohort"
     end
 
+    def key
+      [type, name].join(":")
+    end
+
     private
 
     def updated

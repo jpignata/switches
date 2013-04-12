@@ -72,6 +72,10 @@ module Switches
       "feature"
     end
 
+    def key
+      [type, name].join(":")
+    end
+
     private
 
     def in_cohort?(identifier)

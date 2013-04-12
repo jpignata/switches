@@ -12,10 +12,6 @@ module Switches
       end
     end
 
-    def key_for(item)
-      [item.type, item.name].join(":")
-    end
-
     def parse(json)
       JSONSerializer.deserialize(json)
     rescue JSONSerializer::ParserError

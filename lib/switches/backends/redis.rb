@@ -12,11 +12,11 @@ module Switches
       end
 
       def set(item)
-        connection.set(key_for(item), item.to_json)
+        connection.set(item.key, item.to_json)
       end
 
       def get(item)
-        if data = connection.get(key_for(item))
+        if data = connection.get(item.key)
           parse(data)
         end
       end

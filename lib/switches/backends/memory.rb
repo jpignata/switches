@@ -8,11 +8,11 @@ module Switches
       end
 
       def set(item)
-        $switches_data[key_for(item)] = item.to_json
+        $switches_data[item.key] = item.to_json
       end
 
       def get(item)
-        if data = $switches_data[key_for(item)]
+        if data = $switches_data[item.key]
           parse(data)
         end
       end

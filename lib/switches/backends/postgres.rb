@@ -12,19 +12,19 @@ module Switches
 
       def set(item)
         result = connection.exec("UPDATE #{TABLE} SET value = $1 WHERE key = $2",
-          [item.to_json, key_for(item)]
+          [item.to_json, item.key]
         )
 
         if result.cmd_tuples == 0
           connection.exec("INSERT INTO #{TABLE} (key, value) values($1, $2)",
-            [key_for(item), item.to_json]
+            [item.key, item.to_json]
           )
         end
       end
 
       def get(item)
         result = connection.exec("SELECT value FROM #{TABLE} WHERE key = $1 LIMIT 1",
-          [key_for(item)]
+          [item.key]
         )
 
         result.each do |row|
