@@ -17,24 +17,23 @@ This project is an experiment aiming for a specific set of design goals:
    this data far more often than we're writing it so we want to aggressively
    cache, but...
 
-2) Ensure all nodes get the latest configured switches immediately. A cache
-   that expires given a certain TTL can't work as a client isn't guaranteed
-   to talking to the same instance of our application on each request. A
-   feature disappearing and reappearing depending on which application server
-   we instance we hit is a bug.
+2) Ensure all nodes get the latest configuration data as soon as possible. A
+   cache that expires given a certain TTL can't work as a client isn't
+   guaranteed to talking to the same instance of our application on each
+   request. A feature disappearing and reappearing depending on which
+   application server instance a user hits is a bug.
 
 3) Allow for extension with new backends that support change notification;
-   specifically distributed systems synchronization backends like Zookeeper and
-   perhaps doozerd. Right now it's initially implemented against Redis which is
-   the simplest thing that could possibly work.
+   specifically distributed system synchronization backends like Zookeeper and
+   perhaps doozerd. Right now it's initially implemented against Redis and
+   Postgres.
 
 5) Ensure that any kind of identifier can be used; not just an object that
-   responds to #id. We want to peg our switches on things that aren't
-   ActiveRecord objects (e.g., incoming phone numbers, time of day, etc).
+   responds to `id` We want to peg our switches on things that aren't
+   ActiveRecord objects (e.g., incoming phone numbers, etc).
 
-4) Expose a highly memorable CLI as that's how we're going to be interacting
-   with the switches via `irb`.
-
+4) Expose a memorable CLI as `irb` is primarily how we configure the feature
+   switches.
 
 ## Supported Backends
 
@@ -52,21 +51,24 @@ On startup, switches will connect to Redis twice: once for querying and setting
 configuration data and one for subscribing to a pub/sub channel of change
 notifications. When a change is made to configuration data, an extra call is
 made to Redis to publish a change notification. Once this change notification is
-received by other listening nodes, they will refetch the configuration data
+received by other listening nodes they will refetch the configuration data
 and update their local stores.
 
+     Node A              Redis               Node B
+       |                   |                   |
+       |                   |<-subscribe--------|
+       |                   |                   |
+       |--------------set->|                   |
+       |                   |                   |
+       |-----notify(item)->|-notified(update)->|
+       |                   |                   |
+       |                   |<-get--------------|
+       |                   |                   |
+       |                   |                   |
 
-     Node A            Redis           Node B
-       |                 |               |
-       |                 |<-subscribe----|
-       |                 |               |
-       |------------set->|               |
-       |                 |               |
-       |-publish(update)>|-------update->|
-       |                 |               |
-       |                 |<-get----------|
-       |                 |               |
-       |                 |               |
+This allows a node to validate if a user can pass through a feature switch using
+in-memory data without a querying a backend but ensures that each node is using
+the same data to make the decision.
 
 ## Installation
 
@@ -90,9 +92,6 @@ $switches.feature(:redesign).on?(current_user.id)
 $switches.feature(:redesign).on?(current_user.phone_number)
 # => true
 
-$switches.feature(:redesign).on?(Time.now.hour)
-# => true
-
 # Turn a feature on globally
 $switches.feature(:redesign).on
 # => #<Feature redesign; 100%>
@@ -114,9 +113,9 @@ $switches.cohort(:power_users).remove(424)
 
 # Add a cohort group to a feature
 $switches.feature(:redesign).add(:power_users)
-# => #<Feature djsd; 0%; power_users>
+# => #<Feature redesign; 0%; power_users>
 
 # Remove a cohort group from a feature
 $switches.feature(:redesign).remove(:power_users)
-# => #<Feature djsd; 0%>
+# => #<Feature redesign; 0%>
 ```
