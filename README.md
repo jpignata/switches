@@ -96,13 +96,13 @@ Two rake tasks have been included to create and drop this table:
 
 2. To create the table:
 
-```shell
+```sh
   DATABASE_URL=postgres://root:sekret@localhost/my_application rake switches:postgres:setup
 ```
 
 3. To drop the table
 
-```shell
+```sh
   DATABASE_URL=postgres://root:sekret@localhost/my_application rake switches:postgres:remove
 ```
 
