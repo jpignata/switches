@@ -4,6 +4,10 @@ module Switches
 
     attr_reader :name, :percentage
 
+    def self.collection(instance)
+      Collection.new(self, instance)
+    end
+
     def initialize(name, instance)
       @name = name
       @instance = instance

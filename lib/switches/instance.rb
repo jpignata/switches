@@ -71,11 +71,11 @@ module Switches
     end
 
     def features
-      @features ||= Features.new(self)
+      @features ||= Feature.collection(self)
     end
 
     def cohorts
-      @cohorts ||= Cohorts.new(self)
+      @cohorts ||= Cohort.collection(self)
     end
   end
 end
