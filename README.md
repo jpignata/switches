@@ -73,7 +73,38 @@ the same data to make the decision.
 
 In your Gemfile:
 
+```ruby
   gem "feature_switches"
+```
+
+### Postgres Backend
+
+Switches connects to whatever database is specified as the DATABASE_URL in
+your environment. Note that switches will connect to Postgres twice for each
+node. This is important as Postgres will fork a new process for each connection
+so ensure you have the overhead before using this backend.
+
+To use Postgres a table called `switches` must be created in your database.
+Two rake tasks have been included to create and drop this table:
+
+1. Add this to your Rakefile:
+
+```ruby
+  require "switches"
+  require "switches/tasks"
+```
+
+2. To create the table:
+
+```shell
+  DATABASE_URL=postgres://root:sekret@localhost/my_application rake switches:postgres:setup
+```
+
+3. To drop the table
+
+```shell
+  DATABASE_URL=postgres://root:sekret@localhost/my_application rake switches:postgres:remove
+```
 
 ## Usage
 
