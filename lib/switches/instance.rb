@@ -42,17 +42,8 @@ module Switches
     end
 
     def notified(update)
-      return if update.from?(node_id)
-
-      case update.type
-      when "feature"
-        synchronize do
-          features[update.name].reload
-        end
-      when "cohort"
-        synchronize do
-          cohorts[update.name].reload
-        end
+      unless update.from?(node_id)
+        data[update.type][update.name].reload
       end
     end
 
@@ -76,6 +67,13 @@ module Switches
 
     def cohorts
       @cohorts ||= Cohort.collection(self)
+    end
+
+    def data
+      {
+        "feature" => features,
+        "cohort" => cohorts
+      }
     end
   end
 end
