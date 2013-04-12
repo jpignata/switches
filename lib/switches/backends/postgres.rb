@@ -2,7 +2,7 @@ require "pg"
 
 module Switches
   module Backends
-    class Postgres
+    class Postgres < Backend
       TABLE = "switches"
 
       def initialize(uri, instance)
@@ -77,23 +77,6 @@ module Switches
             process(message)
           end
         end
-      end
-
-      def key_for(item)
-        [item.type, item.name].join(":")
-      end
-
-      def parse(json)
-        JSON.parse(json.to_s)
-      rescue JSON::ParserError
-        {}
-      end
-
-      def process(message)
-        attributes = parse(message)
-        update = Update.new(attributes)
-
-        @instance.notified(update)
       end
     end
   end

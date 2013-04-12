@@ -1,5 +1,7 @@
 module Switches
   class Cohort
+    include JSONSerializer
+
     attr_reader :name
 
     def initialize(name, instance)
@@ -37,11 +39,11 @@ module Switches
       output += ">"
     end
 
-    def to_json
+    def as_json
       {
         name: name,
         members: members
-      }.to_json
+      }
     end
 
     def members

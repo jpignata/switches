@@ -2,7 +2,7 @@ require "redis"
 
 module Switches
   module Backends
-    class Redis
+    class Redis < Backend
       PREFIX = "switches"
       CHANNEL = [PREFIX, "bus"].join(":")
 
@@ -51,23 +51,6 @@ module Switches
         listener.subscribe(CHANNEL) do |on|
           on.message { |_, message| process(message) }
         end
-      end
-
-      def key_for(item)
-        [item.type, item.name].join(":")
-      end
-
-      def parse(json)
-        JSON.parse(json.to_s)
-      rescue JSON::ParserError
-        {}
-      end
-
-      def process(message)
-        attributes = parse(message)
-        update = Update.new(attributes)
-
-        @instance.notified(update)
       end
     end
   end

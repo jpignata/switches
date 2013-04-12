@@ -1,6 +1,6 @@
 module Switches
   module Backends
-    class Memory
+    class Memory < Backend
       def initialize(uri, instance)
         @instance = instance
         $switches_data ||= {}
@@ -30,18 +30,6 @@ module Switches
       def clear
         $switches_data.clear
         $switches_listeners.clear
-      end
-
-      private
-
-      def key_for(item)
-        [item.class.to_s.downcase, item.name].join(":")
-      end
-
-      def parse(json)
-        JSON.parse(json.to_s)
-      rescue JSON::ParserError
-        {}
       end
     end
   end

@@ -1,5 +1,7 @@
 module Switches
   class Feature
+    include JSONSerializer
+
     attr_reader :name, :percentage
 
     def initialize(name, instance)
@@ -44,12 +46,12 @@ module Switches
       output += ">"
     end
 
-    def to_json
+    def as_json
       {
         name: name,
         percentage: percentage.to_i,
         cohorts: @cohorts.to_a
-      }.to_json
+      }
     end
 
     def cohorts

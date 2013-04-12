@@ -1,5 +1,7 @@
 module Switches
   class Update
+    include JSONSerializer
+
     attr_accessor :type, :name, :node_id
 
     def initialize(attributes = {})
@@ -12,12 +14,12 @@ module Switches
       @node_id == node_id
     end
 
-    def to_json
+    def as_json
       {
-        "type" => type,
-        "name" => name,
-        "node_id" => node_id
-      }.to_json
+        type: type,
+        name: name,
+        node_id: node_id
+      }
     end
   end
 end
