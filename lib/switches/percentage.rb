@@ -9,7 +9,7 @@ module Switches
     protected :value
 
     def initialize(value)
-      @value = clip(value)
+      @value = clip(value.to_i)
     end
 
     def <=>(other)
@@ -17,7 +17,7 @@ module Switches
     end
 
     def include?(identifier)
-      Percentage(Zlib.crc32(identifier) % UPPER) < self
+      Percentage(Zlib.crc32(identifier.to_s) % UPPER) < self
     end
 
     def to_i
