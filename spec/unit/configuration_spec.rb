@@ -3,13 +3,11 @@ require "spec_helper"
 describe Switches::Configuration do
   describe ".new" do
     it "yields the given block to the new instance" do
-      instance = nil
-
       configuration = Switches::Configuration.new do |config|
-        instance = config
+        config.freeze
       end
 
-      instance.should eq(configuration)
+      configuration.should be_frozen
     end
   end
 end
