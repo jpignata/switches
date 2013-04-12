@@ -1,8 +1,11 @@
 require "pg"
+require "switches/backends/postgres/connection"
+require "switches/backends/postgres/table"
 
 module Switches
   module Backends
     class Postgres
+      CHANNEL = "switches"
       TABLE = "switches"
 
       def initialize(uri, instance)
@@ -11,27 +14,13 @@ module Switches
       end
 
       def set(item)
-        result = connection.exec("UPDATE #{TABLE} SET value = $1 WHERE key = $2",
-          [item.to_json, item.key]
-        )
-
-        if result.cmd_tuples == 0
-          connection.exec("INSERT INTO #{TABLE} (key, value) values($1, $2)",
-            [item.key, item.to_json]
-          )
-        end
+        table.upsert(item.key, item.to_json)
       end
 
       def get(item)
-        result = connection.exec("SELECT value FROM #{TABLE} WHERE key = $1 LIMIT 1",
-          [item.key]
-        )
-
-        result.each do |row|
-          return JSONSerializer.deserialize(row["value"])
+        if result = table.find(item.key)
+          JSONSerializer.deserialize(result)
         end
-
-        nil
       end
 
       def listen
@@ -39,44 +28,31 @@ module Switches
       end
 
       def notify(update)
-        connection.exec("NOTIFY #{TABLE}, '#{update.to_json}'")
+        connection.notify(CHANNEL, update.to_json)
       end
 
       def clear
-        connection.exec("TRUNCATE TABLE #{TABLE}")
+        table.clear
       end
 
       private
 
       def listener
-        @listener ||= connect
+        @listener ||= Connection.new(@uri)
       end
 
       def connection
-        @connection ||= connect
+        @connection ||= Connection.new(@uri)
       end
 
-      def connect
-        PG.connect(connection_options)
-      end
-
-      def connection_options
-        {
-          user:     @uri.user,
-          password: @uri.password,
-          host:     @uri.host,
-          port:     @uri.port,
-          dbname:   @uri.path[1..-1]
-        }
+      def table
+        @table ||= Table.new(TABLE, connection)
       end
 
       def subscribe
-        loop do
-          listener.exec("LISTEN #{TABLE}")
-          listener.wait_for_notify do |event, pid, message|
-            update = Update.load(message)
-            @instance.notified(update)
-          end
+        listener.listen(CHANNEL) do |message|
+          update = Update.load(message)
+          @instance.notified(update)
         end
       end
     end

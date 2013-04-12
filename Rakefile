@@ -1,0 +1,3 @@
+$: << "lib"
+
+require "switches/tasks"

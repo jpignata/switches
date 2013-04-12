@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe Switches::Backends::Postgres do
-  let(:backend_url) { "postgres://jp:@localhost/switches" }
+  let(:backend_url) { ENV["DATABASE_URL"] }
 
   before do
     alice.clear
