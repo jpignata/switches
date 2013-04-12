@@ -1,35 +1,75 @@
 module Switches
   module Backends
     class Memory < Backend
+      class Bus
+        def initialize
+          @listeners = []
+        end
+
+        def subscribe(&block)
+          @listeners << block
+        end
+
+        def publish(data)
+          @listeners.each do |listener|
+            listener.call(data)
+          end
+        end
+
+        def clear
+          @listeners.clear
+        end
+      end
+
+      def self.bus
+        @bus ||= Bus.new
+      end
+
+      def self.data
+        @data ||= {}
+      end
+
+      def self.clear
+        bus.clear
+        data.clear
+      end
+
       def initialize(uri, instance)
         @instance = instance
-        $switches_data ||= {}
-        $switches_listeners ||= Set.new
       end
 
       def set(item)
-        $switches_data[item.key] = item.to_json
+        data[item.key] = item.to_json
       end
 
       def get(item)
-        if data = $switches_data[item.key]
-          parse(data)
+        if json = data[item.key]
+          parse(json)
         end
       end
 
       def listen
-        $switches_listeners.add(@instance)
-      end
-
-      def notify(update)
-        $switches_listeners.each do |listener|
-          listener.notified(update)
+        bus.subscribe do |update|
+          process(update)
         end
       end
 
+      def notify(update)
+        bus.publish(update.to_json)
+      end
+
       def clear
-        $switches_data.clear
-        $switches_listeners.clear
+        self.class.clear
+      end
+
+      private
+
+      def bus
+        self.class.bus
+      end
+
+      def data
+        self.class.data
       end
     end
   end
