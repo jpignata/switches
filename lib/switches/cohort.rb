@@ -23,16 +23,16 @@ module Switches
     end
 
     def include?(identifier)
-      @members.include?(identifier)
+      @members.include?(identifier.to_s)
     end
 
-    def add(member)
-      @members.add(member.to_s)
+    def add(identifier)
+      @members.add(identifier.to_s)
       updated
     end
 
-    def remove(member)
-      @members.delete(member.to_s)
+    def remove(identifier)
+      @members.delete(identifier.to_s)
       updated
     end
 
