@@ -16,9 +16,9 @@ module Switches
     end
 
     def reload
-      if data = @instance.get(self)
-        @percentage = Percentage(data["percentage"])
-        @cohorts = data["cohorts"].to_set
+      if attributes = @instance.get(self)
+        @percentage = Percentage(attributes["percentage"])
+        @cohorts = attributes["cohorts"].to_set
       end
 
       self

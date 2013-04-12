@@ -15,8 +15,8 @@ module Switches
     end
 
     def reload
-      if data = @instance.get(self)
-        @members = data["members"].to_set
+      if attributes = @instance.get(self)
+        @members = attributes["members"].to_set
       end
 
       self

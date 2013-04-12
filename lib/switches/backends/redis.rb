@@ -16,8 +16,8 @@ module Switches
       end
 
       def get(item)
-        if data = connection.get(item.key)
-          parse(data)
+        if json = connection.get(item.key)
+          parse(json)
         end
       end
 
