@@ -2,7 +2,7 @@ require "pg"
 
 module Switches
   module Backends
-    class Postgres < Backend
+    class Postgres
       TABLE = "switches"
 
       def initialize(uri, instance)
@@ -28,7 +28,7 @@ module Switches
         )
 
         result.each do |row|
-          return parse(row["value"])
+          return JSONSerializer.deserialize(row["value"])
         end
 
         nil
@@ -74,7 +74,8 @@ module Switches
         loop do
           listener.exec("LISTEN #{TABLE}")
           listener.wait_for_notify do |event, pid, message|
-            process(message)
+            update = Update.load(message)
+            @instance.notified(update)
           end
         end
       end

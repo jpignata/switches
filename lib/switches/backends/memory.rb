@@ -1,37 +1,19 @@
+require "switches/backends/memory/bus"
+
 module Switches
   module Backends
-    class Memory < Backend
-      class Bus
-        def initialize
-          @listeners = []
-        end
-
-        def subscribe(&block)
-          @listeners << block
-        end
-
-        def publish(data)
-          @listeners.each do |listener|
-            listener.call(data)
-          end
-        end
-
-        def clear
-          @listeners.clear
-        end
-      end
-
+    class Memory
       def self.bus
         @bus ||= Bus.new
       end
 
-      def self.data
-        @data ||= {}
+      def self.storage
+        @storage ||= {}
       end
 
       def self.clear
         bus.clear
-        data.clear
+        storage.clear
       end
 
       def initialize(uri, instance)
@@ -39,37 +21,28 @@ module Switches
       end
 
       def set(item)
-        data[item.key] = item.to_json
+        self.class.storage[item.key] = item.to_json
       end
 
       def get(item)
-        if json = data[item.key]
-          parse(json)
+        if json = self.class.storage[item.key]
+          JSONSerializer.deserialize(json)
         end
       end
 
       def listen
-        bus.subscribe do |update|
-          process(update)
+        self.class.bus.subscribe do |message|
+          update = Update.load(message)
+          @instance.notified(update)
         end
       end
 
       def notify(update)
-        bus.publish(update.to_json)
+        self.class.bus.publish(update.to_json)
       end
 
       def clear
         self.class.clear
-      end
-
-      private
-
-      def bus
-        self.class.bus
-      end
-
-      def data
-        self.class.data
       end
     end
   end

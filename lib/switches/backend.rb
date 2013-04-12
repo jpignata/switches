@@ -11,18 +11,5 @@ module Switches
         Backends::Memory.new(uri, instance)
       end
     end
-
-    def parse(json)
-      JSONSerializer.deserialize(json)
-    rescue JSONSerializer::ParserError
-      {}
-    end
-
-    def process(message)
-      attributes = parse(message)
-      update = Update.new(attributes)
-
-      @instance.notified(update)
-    end
   end
 end

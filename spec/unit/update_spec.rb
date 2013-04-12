@@ -12,4 +12,15 @@ describe Switches::Update do
       update.node_id.should eq("abc123")
     end
   end
+
+  describe ".load" do
+    it "deserializes the given json uses it to build an update" do
+      json = '{"type":"feature","name":"redesign","node_id":"abc123"}'
+
+      update = Switches::Update.load(json)
+      update.type.should eq("feature")
+      update.name.should eq("redesign")
+      update.node_id.should eq("abc123")
+    end
+  end
 end

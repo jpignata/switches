@@ -12,6 +12,11 @@ module Switches
       end
     end
 
+    def self.load(json)
+      attributes = JSONSerializer.deserialize(json)
+      new(attributes)
+    end
+
     def initialize(attributes = {})
       @type = attributes["type"]
       @name = attributes["name"]
