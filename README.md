@@ -79,10 +79,9 @@ In your Gemfile:
 
 ### Postgres Backend
 
-Switches connects to whatever database is specified as the DATABASE_URL in
-your environment. Note that switches will connect to Postgres twice for each
-node. This is important as Postgres will fork a new process for each connection
-so ensure you have the overhead before using this backend.
+Note that switches will connect to Postgres twice for each node. This is important
+as Postgres will fork a new process for each connection so ensure you have the
+overhead before using this backend.
 
 To use Postgres a table called `switches` must be created in your database.
 Two rake tasks have been included to create and drop this table:
