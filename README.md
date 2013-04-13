@@ -148,3 +148,7 @@ $switches.feature(:redesign).add(:power_users)
 $switches.feature(:redesign).remove(:power_users)
 # => #<Feature redesign; 0%>
 ```
+
+## License
+
+Please see LICENSE.
