@@ -4,6 +4,7 @@ require "rspec"
 require "switches"
 
 ENV["DATABASE_URL"] ||= "postgres://root:@localhost/switches"
+ENV["REDIS_URL"] ||= "redis://localhost:6379/15"
 
 Thread.abort_on_exception = true
 
