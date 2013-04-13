@@ -18,8 +18,6 @@ require "switches/percentage"
 require "switches/update"
 require "switches/backend"
 
-Thread.abort_on_exception = true
-
 def Switches
   configuration = Switches::Configuration.new
   yield configuration
