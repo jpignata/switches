@@ -1,6 +1,7 @@
 require "spec_helper"
+require "switches/backends/memory"
 
-describe Switches::Backends::Redis do
+describe Switches::Backends::Memory do
   let(:backend_url) { "memory:///" }
 
   before do
