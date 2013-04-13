@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     diff-lcs (1.2.2)
+    multi_json (1.7.2)
     pg (0.15.1)
     redis (3.0.3)
     rspec (2.13.0)
@@ -17,6 +18,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  pg
-  redis
-  rspec
+  multi_json (~> 1.7.2)
+  pg (~> 0.15.1)
+  redis (~> 3.0.3)
+  rspec (~> 2.13.0)
