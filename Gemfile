@@ -7,3 +7,7 @@ gem "multi_json", "~> 1.7.2"
 group :development do
   gem "rspec", "~> 2.13.0"
 end
+
+group :test do
+  gem "rake", "~> 10.0.4"
+end
