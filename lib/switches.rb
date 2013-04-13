@@ -18,10 +18,9 @@ require "switches/percentage"
 require "switches/update"
 require "switches/backend"
 
-def Switches
-  configuration = Switches::Configuration.new
-  yield configuration
-
+def Switches(&block)
+  configuration = Switches::Configuration.new(&block)
   instance = Switches::Instance.new(configuration)
+
   instance.start
 end
