@@ -1,5 +1,7 @@
 # Feature Switches
 
+[![Code Climate](https://codeclimate.com/github/jpignata/switches.png)](https://codeclimate.com/github/jpignata/switches)
+
 ### Status: Alpha (Don't use in production)
 
 ## Summary
