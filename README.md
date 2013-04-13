@@ -8,35 +8,34 @@
 
 ## Summary
 
-A small gem for putting feature switches into your application that allow you
-to dynamically enable features to a percentage of users or specific cohort
-groups without a code deploy. There are some excellent gems that provide this
-functionality already -- [rollout](https://github.com/jamesgolick/rollout) and
-[flipper](https://github.com/jnunemaker/flipper).  This project is an
-experiment aiming for a specific set of design goals:
+A gem that manages features switches in an application. Feature switches are
+dynamically configured. They can be turned on, on to a percentage of actors, on
+to a specific group of actors, or off without a code deploy.  There are some
+excellent and mature projects that provide this functionality already:
+[rollout](https://github.com/jamesgolick/rollout) and
+[flipper](https://github.com/jnunemaker/flipper). This project is an experiment
+aiming for a specific set of design goals:
 
 1. Reduce the chatter in the protocol between a node checking to see if a
-   feature is enabled and the backend storage system. We're going to be reading
-   this data far more often than we're writing it so we want to aggressively
-   cache, but...
+feature is enabled for an actor and the backend storage system. We're going to
+be reading this data far more often than we're writing it so we want to
+aggressively cache, but...
 
 2. Ensure all nodes get the latest configuration data as soon as possible. A
-   cache that expires given a certain TTL can't work as a client isn't
-   guaranteed to talking to the same instance of our application on each
-   request. A feature disappearing and reappearing depending on which
-   application server instance a user hits is a bug.
+cache that expires after a certain TTL can't work as a client isn't guaranteed
+to talk to the same instance of our application on each request. A feature
+disappearing and reappearing depending on which application server instance a
+user hits is a bug.
 
 3. Allow for extension with new backends that support change notification;
-   specifically distributed system synchronization backends like Zookeeper and
-   perhaps doozerd. Right now it's initially implemented against Redis and
-   Postgres.
+specifically distributed system synchronization backends like Zookeeper. Right
+now it's initially implemented against Redis and Postgres.
 
-4. Ensure that any kind of identifier can be used; not just an object that
-   responds to `id` We want to peg our switches on things that aren't
-   ActiveRecord objects (e.g., incoming phone numbers, etc).
+4. Ensure that any kind of actor identifier can be used; not just an object that
+responds to `id` We want to gate our switches on things that aren't ActiveRecord
+objects (e.g., incoming phone numbers, username, etc).
 
-5. Expose a memorable CLI as `irb` is primarily how we configure the feature
-   switches.
+5. Expose a memorable CLI as `irb` is how we configure the feature switches.
 
 ## Supported Backends
 
