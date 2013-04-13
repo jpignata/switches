@@ -28,8 +28,7 @@ disappearing and reappearing depending on which application server instance a
 user hits is a bug.
 
 3. Allow for extension with new backends that support change notification;
-specifically distributed system synchronization backends like Zookeeper. Right
-now it's initially implemented against Redis and Postgres.
+specifically distributed system synchronization backends like Zookeeper.
 
 4. Ensure that any kind of actor identifier can be used; not just an object that
 responds to `id` We want to gate our switches on things that aren't ActiveRecord
