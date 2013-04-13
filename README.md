@@ -2,6 +2,7 @@
 
 [![Code Climate](https://codeclimate.com/github/jpignata/switches.png)](https://codeclimate.com/github/jpignata/switches)
 [![Build Status](https://travis-ci.org/jpignata/switches.png?branch=master)](https://travis-ci.org/jpignata/switches)
+[![Gem Version](https://badge.fury.io/rb/feature_switches.png)](http://badge.fury.io/rb/feature_switches)
 
 ### Status: Alpha (Don't use in production)
 
