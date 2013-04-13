@@ -53,17 +53,7 @@ made to Redis to publish a change notification. Once this change notification is
 received by other listening nodes they will refetch the configuration data
 and update their local stores.
 
-     Node A              Redis               Node B
-       |                   |                   |
-       |                   |<-subscribe--------|
-       |                   |                   |
-       |--------------set->|                   |
-       |                   |                   |
-       |-----notify(item)->|-notified(update)->|
-       |                   |                   |
-       |                   |<-get--------------|
-       |                   |                   |
-       |                   |                   |
+![](https://raw.github.com/jpignata/switches/master/doc/switches.png)
 
 This allows a node to validate if a user can pass through a feature switch using
 in-memory data without a querying a backend but ensures that each node is using
