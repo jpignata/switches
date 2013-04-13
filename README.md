@@ -1,6 +1,7 @@
 # Feature Switches
 
 [![Code Climate](https://codeclimate.com/github/jpignata/switches.png)](https://codeclimate.com/github/jpignata/switches)
+[![Build Status](https://travis-ci.org/jpignata/switches.png?branch=master)](https://travis-ci.org/jpignata/switches)
 
 ### Status: Alpha (Don't use in production)
 

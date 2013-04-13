@@ -21,6 +21,6 @@ PLATFORMS
 DEPENDENCIES
   multi_json (~> 1.7.2)
   pg (~> 0.15.1)
-  rake
+  rake (~> 10.0.4)
   redis (~> 3.0.3)
   rspec (~> 2.13.0)
