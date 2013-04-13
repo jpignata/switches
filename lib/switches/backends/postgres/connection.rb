@@ -24,6 +24,10 @@ module Switches
           connection.exec("NOTIFY #{channel}, '#{payload}'")
         end
 
+        def close
+          connection.close
+        end
+
         private
 
         def connection

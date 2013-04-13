@@ -16,6 +16,10 @@ module Switches
       self
     end
 
+    def stop
+      backend.stop
+    end
+
     def feature(name)
       synchronize do
         features[name]

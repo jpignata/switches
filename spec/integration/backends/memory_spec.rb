@@ -4,10 +4,6 @@ describe Switches::Backends::Redis do
   let(:backend_url) { "memory:///" }
 
   before do
-    switches = Switches do |config|
-      config.backend = backend_url
-    end
-
     switches.clear
   end
 

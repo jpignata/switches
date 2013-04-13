@@ -4,7 +4,7 @@ describe Switches::Backends::Postgres do
   let(:backend_url) { ENV["DATABASE_URL"] }
 
   before do
-    alice.clear
+    switches.clear
   end
 
   it_behaves_like "a backend"

@@ -44,6 +44,9 @@ module Switches
       def clear
         self.class.clear
       end
+
+      def stop
+      end
     end
   end
 end

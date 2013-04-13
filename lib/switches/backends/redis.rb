@@ -22,7 +22,7 @@ module Switches
       end
 
       def listen
-        Thread.new { subscribe }
+        @thread ||= Thread.new { subscribe }
       end
 
       def notify(update)
@@ -31,6 +31,12 @@ module Switches
 
       def clear
         connection.flushdb
+      end
+
+      def stop
+        listen.kill
+        connection.quit
+        listener.quit
       end
 
       private
