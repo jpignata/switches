@@ -15,7 +15,7 @@ describe Switches::JSONSerializer do
 
       it "raises a JSONSerializer::ParserError if the given object can't be parsed" do
         expect {
-          Switches::JSONSerializer.deserialize(nil)
+          Switches::JSONSerializer.deserialize({})
         }.to raise_exception(Switches::JSONSerializer::ParserError)
       end
     end
