@@ -13,7 +13,9 @@ shared_examples_for "a backend" do
     end
   end
 
-  let(:switches) { host_a }
+  before do
+    host_a.clear
+  end
 
   after do
     host_a.stop
