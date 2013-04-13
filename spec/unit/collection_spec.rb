@@ -27,4 +27,32 @@ describe Switches::Collection do
       end
     end
   end
+
+  describe "#reload" do
+    context "the item exists in the collection" do
+      it "reloads the item" do
+        collection[:thing].should be
+        item.should_receive(:reload)
+        collection.reload(:thing)
+      end
+    end
+
+    context "the item does not exist in the collection" do
+      it "loads the item once and doesn't call reload again" do
+        item.should_receive(:reload)
+        collection.reload(:thing)
+      end
+    end
+  end
+
+  describe "#include?" do
+    it "returns true if the item is in the collection" do
+      collection[:thing].should be
+      collection.should include(:thing)
+    end
+
+    it "returns false if the item is not in the collection" do
+      collection.should_not include(:thing)
+    end
+  end
 end

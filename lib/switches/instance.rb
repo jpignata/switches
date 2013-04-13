@@ -43,7 +43,7 @@ module Switches
 
     def notified(update)
       unless update.from?(node_id)
-        data[update.type][update.name].reload
+        collections[update.type].reload(update.name)
       end
     end
 
@@ -69,7 +69,7 @@ module Switches
       @cohorts ||= Cohort.collection(self)
     end
 
-    def data
+    def collections
       {
         "feature" => features,
         "cohort" => cohorts
