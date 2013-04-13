@@ -34,7 +34,8 @@ specifically distributed system synchronization backends like Zookeeper.
 responds to `id` We want to gate our switches on things that aren't ActiveRecord
 objects (e.g., incoming phone numbers, username, etc).
 
-5. Expose a memorable CLI as `irb` is how we configure the feature switches.
+5. Expose an easy-to-remember CLI since `irb` is how we'll configure the feature
+switches.
 
 ## Supported Backends
 
